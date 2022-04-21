@@ -1,1 +1,13 @@
 {% extends base.html %}
+
+{% block main %}
+  <table>
+  {% for booking in bookings %}
+    <tr>
+    {% for data in booking %}
+      <td>{{data}}</td>
+    {% endfor %}
+    <td><a href={{url_for("edit", email=email, booking_id=booking_id)}}></td>
+    </tr>
+  {% endfor %}
+  </table>
