@@ -33,6 +33,13 @@ def more_info():
         df = pd.DataFrame(query(conn, "SELECT * FROM Movie"))
 
     return render_template('more_info.html', df=df)
+               
+               
+@app.route("edit_booking/<email>", methods=["POST", "GET"])
+def edit_booking(email):
+    conn = get_db(DATABASE, g)
+    df = query(conn, "some query", email)
+
 
 
 if __name__ == '__main__':
