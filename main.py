@@ -35,12 +35,17 @@ def more_info():
     return render_template('more_info.html', df=df)
                
                
-@app.route("bookings/<email>", methods=["POST", "GET"])
+@app.route("/bookings/<email>", methods=["POST", "GET"])
 def bookings(email):
     conn = get_db(DATABASE, g)
     bookings = query(conn, "select * from Booking where email = ?", email)
                
-    return render_template("bookings.html", bookings=bookings)
+    return render_template("bookings.html", bookings=bookings, email=email)
+               
+
+@app.route("/edit/<email>/<booking_id>")
+def edit_booking(email, booking_id):
+    pass
 
 
 if __name__ == '__main__':
