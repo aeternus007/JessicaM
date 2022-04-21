@@ -25,10 +25,10 @@ def more_info():
 
     if request.method == 'POST':
         email = request.form['email']
-        if len(query(conn, f"SELECT * FROM Booking WHERE Email = {email}")) == 0:
+        if len(query(conn, "SELECT * FROM Booking WHERE Email = ?", email) == 0:
             df = "No bookings from that email."
         else:
-            df = query(conn, f"SELECT * FROM Booking WHERE Email = {email}")
+            df = query(conn, "SELECT * FROM Booking WHERE Email = ?", email)
     if not df:
         df = pd.DataFrame(query(conn, "SELECT * FROM Movie"))
 
