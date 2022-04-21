@@ -28,18 +28,19 @@ def more_info():
         if len(query(conn, "SELECT * FROM Booking WHERE Email = ?", email) == 0:
             df = "No bookings from that email."
         else:
-            df = query(conn, "SELECT * FROM Booking WHERE Email = ?", email)
+            return redirect(url_for("edit_booking", email=email))
     if not df:
         df = pd.DataFrame(query(conn, "SELECT * FROM Movie"))
 
     return render_template('more_info.html', df=df)
                
                
-@app.route("edit_booking/<email>", methods=["POST", "GET"])
-def edit_booking(email):
+@app.route("bookings/<email>", methods=["POST", "GET"])
+def bookings(email):
     conn = get_db(DATABASE, g)
-    df = query(conn, "some query", email)
-
+    bookings = query(conn, "select * from Booking where email = ?", email)
+               
+    return render_template("bookings.html", bookings=bookings)
 
 
 if __name__ == '__main__':
