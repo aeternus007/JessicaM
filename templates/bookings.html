@@ -7,7 +7,7 @@
     {% for data in booking %}
       <td>{{data}}</td>
     {% endfor %}
-    <td><a href="{{url_for("edit", email=email, booking_id=booking_id)}}"></td>
+    <td><a href="{{url_for("edit", email=email, booking_id=booking[])}}"></td>
     </tr>
   {% endfor %}
   </table>
