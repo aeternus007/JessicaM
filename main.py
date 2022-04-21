@@ -43,9 +43,15 @@ def bookings(email):
     return render_template("bookings.html", bookings=bookings, email=email)
                
 
-@app.route("/edit/<email>/<booking_id>")
+@app.route("/edit/<email>/<booking_id>", methods=["POST", "GET"])
 def edit_booking(email, booking_id):
-    pass
+    conn = get_db(DATABASE, g)
+    booking = query(conn, "select * from Booking where Booking_id = ?", booking_id)
+
+    if request.method == "POST":
+        query(conn, "update Booking set amount = ? where Booking_id = ?", request.form["amount"], booking_id
+               
+    return render_template("edit_booking.html", booking=booking, id=booking_id, ammount)
 
 
 if __name__ == '__main__':
