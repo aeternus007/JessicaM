@@ -1,4 +1,4 @@
-{% extends base.html %}
+{% extends "base.html" %}
 
 {% block main %}
   <table>
@@ -7,7 +7,8 @@
     {% for data in booking %}
       <td>{{data}}</td>
     {% endfor %}
-    <td><a href="{{url_for("edit_booking", email=email, booking_id=booking[0])}}"></td>
+    <td><a href="{{url_for("edit_bookings", email=email, booking_id=booking[2])}}"> edit</a></td>
     </tr>
   {% endfor %}
   </table>
+{% endblock %}

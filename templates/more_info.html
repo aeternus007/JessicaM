@@ -4,10 +4,13 @@
 
 <div class="container">
 
-
-<div class="table">
-{{ df.to_html(border=0, classes="table")|safe }}
-</div>
+{% if df is string %}
+    <p>{{ df }}</p>
+{% else %}
+    <div class="table">
+    {{ df.to_html(border=0, classes="table")|safe }}
+    </div>
+{% endif %}
 
 
 <form action="#" method="post">

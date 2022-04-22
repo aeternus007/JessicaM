@@ -1,7 +1,6 @@
 import sqlite3
 from sqlite3 import Error
 
-
 def get_db(database, g):
     db = getattr(g, '_database', None)
     if db is None:

@@ -1,4 +1,4 @@
-{% extends base.html %}
+{% extends "base.html" %}
 
 {% block main %}
   <form method="POST">
@@ -8,3 +8,4 @@
   </form>
   <a href="{{url_for("bookings", email=email)}}">back</a>
   </table>
+{% endblock %}

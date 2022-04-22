@@ -1,7 +1,7 @@
 import pandas as pd
-from flask import Flask, render_template, request, redirect, url_for, g
+from flask import Flask, render_template, request, redirect, url_for, g, flash
 
-from utils import *
+from utils import query, get_db
 
 
 DATABASE = 'test.sqlite3'
@@ -25,10 +25,10 @@ def more_info():
 
     if request.method == 'POST':
         email = request.form['email']
-        if len(query(conn, "SELECT * FROM Booking WHERE Email = ?", email) == 0:
+        if len(query(conn, "SELECT * FROM Booking WHERE Email = ?", (email, ))) == 0:
             df = "No bookings from that email."
         else:
-            return redirect(url_for("edit_booking", email=email))
+            return redirect(url_for("bookings", email=email))
     if not df:
         df = pd.DataFrame(query(conn, "SELECT * FROM Movie"))
 
@@ -38,21 +38,31 @@ def more_info():
 @app.route("/bookings/<email>", methods=["POST", "GET"])
 def bookings(email):
     conn = get_db(DATABASE, g)
-    bookings = query(conn, "select * from Booking where email = ?", email)
+    bookings = query(conn, "select * from Booking where Email = ?", (email, ))
+    print(bookings)
+    if len(bookings) < 1:
+        flash("there are no bookings with that email!", "warning")
+        bookings = ["There are no bookings"]
                
     return render_template("bookings.html", bookings=bookings, email=email)
                
 
 @app.route("/edit/<email>/<booking_id>", methods=["POST", "GET"])
-def edit_booking(email, booking_id):
+def edit_bookings(email, booking_id):
     conn = get_db(DATABASE, g)
-    booking = query(conn, "select * from Booking where Booking_id = ?", booking_id)
-
+    booking = query(conn, "select * from Booking where Booking_id = ?", (booking_id,))
+    print(booking)
+    viewing = query(conn, "select Movie_id from Viewing where Viewing_id = ?", (booking[0][1],))
+    movie = query(conn, "select Title from Movie where Movie_ID = ?", (viewing[0][0],))[0][0][0:]
+  
     if request.method == "POST":
-        query(conn, "update Booking set amount = ? where Booking_id = ?", request.form["amount"], booking_id
-               
-    return render_template("edit_booking.html", booking=booking, id=booking_id, ammount)
+        query(conn, "update Booking set No_Booking = ? where Booking_id = ?", (request.form["amount"], booking_id))
+        booking = query(conn, "select * from Booking where Booking_id = ?", (booking_id,))
+        amount = booking[0][-1]
+        flash(f"succesfully edited ticket amount to {amount}", "succes")    
+        
+    return render_template("edit_bookings.html", booking=booking, id=booking_id, amount=amount, email=email, film_title=movie)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
