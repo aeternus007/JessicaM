@@ -13,7 +13,6 @@ app = Flask(__name__)
 def home():
     conn = get_db(DATABASE, g)
     df = pd.DataFrame(query(conn, "SELECT * FROM Movie")[:5])
-    # print(movies)
 
     return render_template('home.html', df=df)
 
@@ -39,7 +38,6 @@ def more_info():
 def bookings(email):
     conn = get_db(DATABASE, g)
     bookings = query(conn, "select * from Booking where Email = ?", (email, ))
-    print(bookings)
     if len(bookings) < 1:
         flash("there are no bookings with that email!", "warning")
         bookings = ["There are no bookings"]
@@ -51,7 +49,7 @@ def bookings(email):
 def edit_bookings(email, booking_id):
     conn = get_db(DATABASE, g)
     booking = query(conn, "select * from Booking where Booking_id = ?", (booking_id,))
-    print(booking)
+    amount = booking[0][-1]
     viewing = query(conn, "select Movie_id from Viewing where Viewing_id = ?", (booking[0][1],))
     movie = query(conn, "select Title from Movie where Movie_ID = ?", (viewing[0][0],))[0][0][0:]
   
